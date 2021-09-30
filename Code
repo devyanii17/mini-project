@@ -1,1 +1,121 @@
+#connection.php:
 
+<?php
+$link=mysqli_connect("localhost","root","24012000") or die(mysqli_error($link));
+mysqli_select_db($link, "no_plate_record") or die(mysqli_error($link));
+?>
+
+#main.php:
+
+<?php
+include"connection.php";
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SOCIETY</title>
+</head>
+<body style="background-color:cornsilk">
+<center><b><font color ="navy"><h1>WELCOME  TO  SOCIETY</h1></font></b></center>
+<center><img src="society.jpeg" alt="SOCIETY" width="300" height="240"></center>
+
+<center><h3> Your license number is : 
+
+<?php
+$res=mysqli_query($link,"select * from no_plate") or die(mysqli_error($link));
+$row=mysqli_fetch_array($res);
+echo $row["num"];
+?>
+
+</h3></center>
+
+<?php
+$flag = 0;
+$check=mysqli_query($link,"select vehicle_no from residents") or die(mysqli_error($link));
+while($val=mysqli_fetch_array($check))
+{
+	if($val["vehicle_no"] == $row["num"]) {
+		$flag = 1;	
+		break;
+	}
+}
+
+if($flag == 1) {
+	echo "<br><center><h3>We found that your are a resident of this society.<br>Thankyou!</h3></center>";	
+}
+else {
+	echo "<br><center><h3>We found that your are not a resident of this society.<br>Click below to register.</h3></center>";
+?>
+
+<center>
+<a href = "register.php">
+<button><b><font color = "maroon">REGISTER</font></b></button>
+</a>
+</center>
+
+
+<?php
+}
+?>
+
+</body>
+</html>
+
+#register.php
+
+<?php
+include"connection.php";
+?>
+
+<html lang="en">
+<head>
+  <title>REGISTRATION  </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+<div class="col-Ig-4">  
+  <h2>Register your details</h2><br><br>
+  <form action="" name="table1" method="post">
+    
+    <div class="form-group">
+      <label for="Name">Name:</label>
+      <input type="text" class="form-control" id="name" placeholder="Enter Name" name="name">
+    </div>
+   
+    <div class="form-group">
+      <label for="Phone_Number">Phone Number:</label>
+      <input type="text" class="form-control" id="phone_no" placeholder="Enter Phone Number" name="phone_no">
+    </div>
+    
+  
+      <button type="submit" name="insert" class="btn btn-default">Register</button> 
+    
+  </form>
+</div>
+</div>
+</body>
+
+<?php
+if(isset($_POST["insert"]))
+{
+    $res=mysqli_query($link,"select * from no_plate") or die(mysqli_error($link));
+    $row=mysqli_fetch_array($res);
+
+    mysqli_query($link, "insert into visitors (vehicle_no,name,phone_no) values ('$row[num]','$_POST[name]','$_POST[phone_no]')");
+   
+   ?>
+   
+   <?php
+    echo "<br><center><h3>Your data has been successfully inserted.<br>Thankyou!</h3></center>"
+
+   ?>
+   
+   <?php
+}
+?>
