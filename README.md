@@ -1,4 +1,10 @@
 # mini-project
+YouTube links  of our mini project:
+
+[Implementation](https://youtu.be/iW0o7LfRqL8)
+
+[Presentation](https://youtu.be/mYk7CHdW1Bw)
+
 Number plate recognition system to enter flat schemes and complexes.
 
 Aim / Objective :
